@@ -1,7 +1,8 @@
-
 package com.paypilot.util;
-import java.util.*;
+
 import com.paypilot.model.Bill;
+
+import java.util.*;
 
 public class BillSorter {
 
