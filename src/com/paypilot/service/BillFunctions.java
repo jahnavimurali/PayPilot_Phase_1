@@ -144,8 +144,9 @@ public class BillFunctions {
     }
 
     // This method removes a bill from the list of bills and return the updated list
-    public List<Bill> removeBill(Bill billToRemove) {
-        billList.remove(billToRemove);
-        return billList;
+    public List<Bill> removeBill(int billId) {
+        List<Bill> bills = findAllBills();
+        bills.removeIf(bill -> bill.getBillId() == billId);
+        return bills;
     }
 }
