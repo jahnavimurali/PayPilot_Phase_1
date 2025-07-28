@@ -1,4 +1,4 @@
-package com.paypilot.reader;
+package com.paypilot.util;
 
 import com.paypilot.model.Bill;
 import java.io.BufferedReader;
@@ -44,19 +44,6 @@ public class BillReader {
 
         return bills;
     }
+  
 
-   
-    public static void main(String[] args) {
-        String csvPath = "bills.csv"; 
-
-        try {
-            List<Bill> bills = readBillsFromCSV(csvPath);
-            System.out.println("Bills loaded: " + bills.size());
-            for(Bill bill : bills) {
-                System.out.println(bill);
-            }
-        } catch (IOException e) {
-            System.err.println("Failed to read bills: " + e.getMessage());
-        }
-    }
 }
