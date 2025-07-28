@@ -1,0 +1,2 @@
+Bill{userId=1, billId=5, billName='Electricity Bill', category='Electricity', dueDate=2025-07-23, amount=175.0, isRecurring=false}
+Bill{userId=1, billId=10, billName='Electricity Bill', category='Electricity', dueDate=2025-07-18, amount=250.0, isRecurring=true}
