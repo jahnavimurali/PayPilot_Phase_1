@@ -10,9 +10,21 @@ public class BillFunctions {
     return bill != null && bill.isRecurring();
   }
 
+  // Function to avoid generating a recurring bill if it already exists
+  public static boolean hasRecurringBillForNextMonth(Bill originalBill, List<Bill> allBills) {
+	    LocalDate nextDueDate = originalBill.getDueDate().plusMonths(1);
+
+	    return allBills.stream().anyMatch(existing ->
+	        existing.getUserId().equals(originalBill.getUserId()) &&
+	        existing.getBillName().equalsIgnoreCase(originalBill.getBillName()) &&
+	        existing.getCategory().equalsIgnoreCase(originalBill.getCategory()) &&
+	        existing.getDueDate().equals(nextDueDate)
+	    );
+	}
+
   // Function to check if a bill is recurring and autogenerating next months's bill
   public static List<Bill> checkAndGenerateRecurringBills(List<Bill> bills) 
-    {
+  {
         List<Bill> newBills = new ArrayList<>();
         Set<String> existingIds = new HashSet<>();
         LocalDate currentDate = LocalDate.now();
@@ -39,18 +51,22 @@ public class BillFunctions {
                 // Generating Date for the next month's bill
                 LocalDate nextDueDate = bill.getDueDate().plusMonths(1);
                 
-                // Creating bill for the next month 
-                Bill nextMonthBill = new Bill(
-                	bill.getUserId(),
-                    newId,
-                    bill.getBillName(),
-                    bill.getCategory(),
-                    nextDueDate,
-                    bill.getAmount(),
-                    true
-                );
-                
-                newBills.add(nextMonthBill);
+                 //Checking if there is a bill already generated for next month
+                if (!hasRecurringBillForNextMonth(bill, bills))
+                {
+                	// Creating bill for the next month 
+                    Bill nextMonthBill = new Bill(
+                    	bill.getUserId(),
+                        newId,
+                        bill.getBillName(),
+                        bill.getCategory(),
+                        nextDueDate,
+                        bill.getAmount(),
+                        true
+                    );
+                    
+                    newBills.add(nextMonthBill);
+                }
             }
         }
 
