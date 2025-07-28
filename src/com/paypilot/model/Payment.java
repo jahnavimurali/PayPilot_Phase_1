@@ -117,7 +117,7 @@ public class Payment {
                 ", billId=" + billId +
                 ", amountPaid=" + amountPaid +
                 ", paymentDate=" + paymentDate +
-                ", mode='" + mode + '\'' +
+                ", mode='" + mode + '\' +
                 '}';
     }
 }
