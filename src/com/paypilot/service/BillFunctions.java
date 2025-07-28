@@ -24,7 +24,7 @@ public class BillFunctions {
     }
 
     // Method to filter and return bills based on user
-    public List<Bill> findAllBillsByUser(String userId) {
+    public List<Bill> findAllBillsByUser(int userId) {
         return billList.stream()
             .filter(bill -> bill.getUserId().equals(userId))
             .collect(Collectors.toList());
