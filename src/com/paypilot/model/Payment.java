@@ -1,10 +1,11 @@
 package com.paypilot.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 import com.paypilot.util.DateUtil;
 
-public class Payment {
+public class Payment implements Serializable {
 
     private int paymentId;
     private int billId;
