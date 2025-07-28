@@ -1,7 +1,7 @@
 package com.paypilot.test;
 
-import model.Payment;
-import util.FileUtil;
+import com.paypilot.model.Payment;
+import com.paypilot.util.FileUtil;
 import org.junit.jupiter.api.Test;
 import java.io.File;
 
