@@ -5,6 +5,29 @@ import com.paypilot.model.Bill;
 
 public class BillFunctions {
 
+    private List<Bill> billList; // Variable to store all the bills
+
+    public BillFunctions() {
+        this.billList = new ArrayList<>();
+    }
+
+    // Method to populate bills
+    public void addBill(Bill bill) {
+        billList.add(bill);
+    }
+
+    // Method to find and return all bills
+    public List<Bill> findAllBills() {
+        return new ArrayList<>(billList); //Returning a copy of Bill Lists to protect internal list
+    }
+
+    // Method to filter and return bills based on user
+    public List<Bill> findAllBillsByUser(String userId) {
+        return billList.stream()
+            .filter(bill -> bill.getUserId().equals(userId))
+            .collect(Collectors.toList());
+    }
+
   // Function to check if a bill is recurring 
   public static boolean isBillRecurring(Bill bill) {
     return bill != null && bill.isRecurring();
