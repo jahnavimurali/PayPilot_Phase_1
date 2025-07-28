@@ -30,10 +30,7 @@ public class BillFunctions {
 	        .collect(Collectors.toList());
     }
 
-  // Function to check if a bill is recurring 
-  public static boolean isBillRecurring(Bill bill) {
-    return bill != null && bill.isRecurring();
-  }
+  
 
   // Function to avoid generating a recurring bill if it already exists
   public static boolean hasRecurringBillForNextMonth(Bill originalBill, List<Bill> allBills) {
@@ -46,6 +43,15 @@ public class BillFunctions {
 	        existing.getDueDate().equals(nextDueDate)
 	    );
 	}
+
+
+  // Checking using below methods, if the bills are recurring and generating new due date, and amount
+
+  // Function to check if a bill is recurring 
+  public static boolean isBillRecurring(Bill bill) {
+    return bill != null && bill.isRecurring();
+  }
+
 
   // Function to check if a bill is recurring and autogenerating next months's bill
   public static List<Bill> checkAndGenerateRecurringBills(List<Bill> bills) 
@@ -116,7 +122,8 @@ public class BillFunctions {
     }
 
     // This method returns a list of all overdue bills
-    public static List<Bill> getOverDueBills(List<Bill> bills){
+    public static List<Bill> getOverDueBills(){
+        List<Bill> bills = new BillFunctions().findAllBills();
         List<Bill> overdueBills = new ArrayList<>();
         LocalDate currentDate = LocalDate.now();
 
@@ -133,6 +140,7 @@ public class BillFunctions {
 
     // This method removes a bill from the list of bills and return the updated list
     public List<Bill> removeBill(Bill billToRemove) {
+        List<Bill> billList = this.findAllBills();
         billList.remove(billToRemove);
         return billList;
     }
