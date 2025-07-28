@@ -47,11 +47,6 @@ public class BillFunctions {
   public static boolean isBillRecurring(Bill bill) {
     return bill != null && bill.isRecurring();
   }
-	        .filter(bill -> bill.getUserId() == userId)
-	        .collect(Collectors.toList());
-    }
-
-  
 
   // Function to avoid generating a recurring bill if it already exists
   public static boolean hasRecurringBillForNextMonth(Bill originalBill, List<Bill> allBills) {
@@ -65,20 +60,11 @@ public class BillFunctions {
 	    );
 	}
 
-
-  // Checking using below methods, if the bills are recurring and generating new due date, and amount
-
-  // Function to check if a bill is recurring 
-  public static boolean isBillRecurring(Bill bill) {
-    return bill != null && bill.isRecurring();
-  }
-
-
   // Function to check if a bill is recurring and autogenerating next months's bill
   public static List<Bill> checkAndGenerateRecurringBills(List<Bill> bills) 
   {
         List<Bill> newBills = new ArrayList<>();
-        Set<Integer> existingIds = new HashSet<>();
+        Set<String> existingIds = new HashSet<>();
         LocalDate currentDate = LocalDate.now();
 
         //Adding existing IDs to the set
@@ -91,12 +77,11 @@ public class BillFunctions {
         {
             if (bill.isRecurring() && bill.getDueDate().isBefore(currentDate)) 
             {
-                
+                String newId;
                 // Generating a unique ID that doesn't clash
-                int newId;
-                Random random = new Random();
-                do {
-                    newId = random.nextInt(Integer.MAX_VALUE); // Ensures a non-negative int
+                do 
+                {
+                    newId = UUID.randomUUID().toString();
                 } while (existingIds.contains(newId));
                 
                 existingIds.add(newId);
@@ -143,8 +128,7 @@ public class BillFunctions {
     }
 
     // This method returns a list of all overdue bills
-    public static List<Bill> getOverDueBills(){
-        List<Bill> bills = new BillFunctions().findAllBills();
+    public static List<Bill> getOverDueBills(List<Bill> bills){
         List<Bill> overdueBills = new ArrayList<>();
         LocalDate currentDate = LocalDate.now();
 
@@ -161,7 +145,6 @@ public class BillFunctions {
 
     // This method removes a bill from the list of bills and return the updated list
     public List<Bill> removeBill(Bill billToRemove) {
-        List<Bill> billList = this.findAllBills();
         billList.remove(billToRemove);
         return billList;
     }
