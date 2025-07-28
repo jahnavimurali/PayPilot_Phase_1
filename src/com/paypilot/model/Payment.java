@@ -1,124 +1,38 @@
-package com.paypilot.model;
+package com.paypilot.util;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
-import com.paypilot.util.DateUtil;
+import java.io.*;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
-public class Payment implements Serializable {
+import com.paypilot.model.Payment;
 
-    private int paymentId;
-    private int billId;
-    private double amountPaid;
-    private LocalDate paymentDate;
-    private String mode;
+public class PaymentBackup {
 
-    // Constructor 
-    public Payment(int paymentId, int billId, double amountPaid, LocalDate paymentDate, String mode) {
-        this.paymentId = paymentId;
-        this.billId = billId;
-        this.amountPaid = validateAmount(amountPaid);
-        this.paymentDate = paymentDate;
-        this.mode = mode;
-    }
+    public static void backupPayments(List<Payment> payments, String outputFile) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile, true))) {
+            DateTimeFormatter timestampFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    // Getters and Setters
-    public int getPaymentId() {
-        return paymentId;
-    }
+            for (Payment payment : payments) {
+                String timestamp = LocalDateTime.now().format(timestampFormatter);
+                String formattedDate = payment.getPaymentDate().format(dateFormatter);
 
-    public void setPaymentId(int paymentId) {
-        this.paymentId = paymentId;
-    }
+                String line = String.format(
+                        "Timestamp: %s | PaymentID: %d | BillID: %d | Date: %s | Amount: %.2f",
+                        timestamp,
+                        payment.getPaymentId(),
+                        payment.getBillId(),
+                        formattedDate,
+                        payment.getAmountPaid()
+                );
 
-    public int getBillId() {
-        return billId;
-    }
-
-    public void setBillId(int billId) {
-        this.billId = billId;
-    }
-
-    public double getAmountPaid() {
-        return amountPaid;
-    }
-
-    public void setAmountPaid(double amountPaid) {
-        this.amountPaid = validateAmount(amountPaid);
-    }
-
-    public LocalDate getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public String getMode() {
-        return mode;
-    }
-
-    public void setMode(String mode) {
-        this.mode = mode;
-    }
-
-    // Amount validation
-    private double validateAmount(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be positive.");
-        }
-        return amount;
-    }
-
-    // Display method
-    public void display() {
-        System.out.println("Payment ID  : " + paymentId);
-        System.out.println("Bill ID     : " + billId);
-        System.out.println("Amount Paid : ₹" + amountPaid);
-        System.out.println("Payment Date: " + (paymentDate != null ? DateUtil.format(paymentDate) : "N/A"));
-        System.out.println("Mode        : " + mode);
-
-        LocalDate today = LocalDate.now();
-        if (paymentDate != null) {
-            if (paymentDate.isAfter(today)) {
-                System.out.println("Status      : Scheduled");
-            } else if (paymentDate.isEqual(today)) {
-                System.out.println("Status      : Processed Today");
-            } else {
-                System.out.println("Status      : Completed");
+                writer.write(line);
+                writer.newLine();
             }
+
+        } catch (IOException e) {
+            System.out.println("Error writing backup: " + e.getMessage());
         }
-    }
-
-    // equals method
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Payment)) return false;
-        Payment payment = (Payment) o;
-        return paymentId == payment.paymentId &&
-                billId == payment.billId &&
-                Double.compare(payment.amountPaid, amountPaid) == 0 &&
-                Objects.equals(paymentDate, payment.paymentDate) &&
-                Objects.equals(mode, payment.mode);
-    }
-
-    // hashCode
-    @Override
-    public int hashCode() {
-        return Objects.hash(paymentId, billId, amountPaid, paymentDate, mode);
-    }
-
-    // toString
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "paymentId=" + paymentId +
-                ", billId=" + billId +
-                ", amountPaid=" + amountPaid +
-                ", paymentDate=" + paymentDate +
-                ", mode='" + mode + '\'' +
-                '}';
     }
 }
