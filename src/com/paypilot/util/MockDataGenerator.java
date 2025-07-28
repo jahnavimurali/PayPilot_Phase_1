@@ -1,5 +1,9 @@
 package com.paypilot.util;
 
+import com.paypilot.model.Bill;
+import com.paypilot.model.Payment;
+import com.paypilot.model.User;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
