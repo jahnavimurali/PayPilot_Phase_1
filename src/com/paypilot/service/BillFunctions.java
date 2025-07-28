@@ -151,4 +151,27 @@ public class BillFunctions {
         bills.removeIf(bill -> bill.getBillId() == billId);
         return bills;
     }
+	    /**
+     * Exports a list of bills to a text file.
+     *
+     * @param bills    The list of bills to export.
+     * @param filePath The path of the text file.
+     */
+    public static void exportBillsToTextFile(List<Bill> bills, String filePath) {
+        if (bills == null || bills.isEmpty()) {
+            System.out.println("No bills to export.");
+            return;
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            for (Bill bill : bills) {
+                bw.write(bill.toString());
+                bw.newLine();
+            }
+            System.out.println("Bills exported to " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	
 }
