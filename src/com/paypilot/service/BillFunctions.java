@@ -1,7 +1,9 @@
 package com.paypilot.service;
 import java.time.LocalDate;
 import java.util.*;
-import com.paypilot.model.Bill; 
+import java.util.stream.Collectors;
+import com.paypilot.model.Bill;
+import com.paypilot.model.User; 
 
 public class BillFunctions {
 
@@ -22,10 +24,21 @@ public class BillFunctions {
     }
 
     // Method to filter and return bills based on user
-    public List<Bill> findAllBillsByUser(String userId) {
+    public List<Bill> findAllBillsByUser(int userId) {
         return billList.stream()
-            .filter(bill -> bill.getUserId().equals(userId))
+            .filter(bill -> bill.getUserId() == userId)
             .collect(Collectors.toList());
+    }
+// Method to get Total Due Bills of a Specific User
+    public double getTotalDueBill(User user) {
+        List<Bill> userSpecificBills = findAllBillsByUser(user.getUserId());
+        double totalDue = 0;
+        for (Bill bill : userSpecificBills) {
+            if (bill.getDueDate().isBefore(LocalDate.now())) {
+                totalDue += bill.getAmount();
+            }
+        }
+        return totalDue;
     }
 
   // Function to check if a bill is recurring 
@@ -38,7 +51,7 @@ public class BillFunctions {
 	    LocalDate nextDueDate = originalBill.getDueDate().plusMonths(1);
 
 	    return allBills.stream().anyMatch(existing ->
-	        existing.getUserId().equals(originalBill.getUserId()) &&
+	        existing.getUserId() == originalBill.getUserId() &&
 	        existing.getBillName().equalsIgnoreCase(originalBill.getBillName()) &&
 	        existing.getCategory().equalsIgnoreCase(originalBill.getCategory()) &&
 	        existing.getDueDate().equals(nextDueDate)
