@@ -51,7 +51,7 @@ public class BillFunctions {
   public static List<Bill> checkAndGenerateRecurringBills(List<Bill> bills) 
   {
         List<Bill> newBills = new ArrayList<>();
-        Set<String> existingIds = new HashSet<>();
+        Set<int> existingIds = new HashSet<>();
         LocalDate currentDate = LocalDate.now();
 
         //Adding existing IDs to the set
