@@ -1,8 +1,10 @@
 package com.paypilot.model;
 
 import java.util.Objects;
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
+	private static final long serialVersionUID = 1L;
     private int userId;
     private String name;
     private String email;

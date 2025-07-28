@@ -1,24 +1,25 @@
 package com.paypilot.util;
 
-import com.paypilot.util.User;
-import com.paypilot.util.Bill;
-import com.paypilot.util.Payment;
+import com.paypilot.model.Bill;
+import com.paypilot.model.Payment;
+import com.paypilot.model.User;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MockDataGenerator {
     private static final String[] BILL_NAMES = {
         "Water Bill", "Internet Bill", "Mobile Bill", "Gas Bill", "Electricity Bill"
     };
+
     private static final String[] CATEGORIES = {
         "Water", "Internet", "Mobile", "Gas", "Electricity"
     };
+
     private static final String[] PAYMENT_MODES = {
         "Credit Card", "NetBanking", "Cash on Delivery"
     };
-
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
     public static List<User> generateUsers() {
         List<User> users = new ArrayList<>();
@@ -32,13 +33,12 @@ public class MockDataGenerator {
 
     public static List<Bill> generateBills() {
         List<Bill> bills = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
         for (int i = 1; i <= 10; i++) {
+            int userId = (i % 5) + 1;
             int index = (i - 1) % BILL_NAMES.length;
-            cal.setTime(new Date());
-            cal.add(Calendar.DAY_OF_MONTH, -i);
-            String dueDate = sdf.format(cal.getTime());
+            LocalDate dueDate = LocalDate.now().minusDays(i);
             bills.add(new Bill(
+                userId,
                 i,
                 BILL_NAMES[index],
                 CATEGORIES[index],
@@ -52,12 +52,9 @@ public class MockDataGenerator {
 
     public static List<Payment> generatePayments(List<Bill> bills) {
         List<Payment> payments = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
         for (int i = 1; i <= 5; i++) {
             Bill bill = bills.get(i - 1);
-            cal.setTime(new Date());
-            cal.add(Calendar.DAY_OF_MONTH, -i);
-            String paymentDate = sdf.format(cal.getTime());
+            LocalDate paymentDate = LocalDate.now().minusDays(i);
             payments.add(new Payment(
                 i,
                 bill.getBillId(),
