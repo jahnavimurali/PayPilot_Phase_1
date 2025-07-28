@@ -1,9 +1,10 @@
 package com.paypilot.model;
 
 import java.util.Objects;
+import java.io.Serializable;
 
-
-public class User {
+public class User implements Serializable {
+	private static final long serialVersionUID = 1L;
     private int userId;
     private String name;
     private String email;
@@ -41,6 +42,7 @@ public class User {
     public void display() {
         System.out.println(this.toString());
     }
+
     @Override
     public String toString() {
         return "User{" +
@@ -51,10 +53,11 @@ public class User {
                 ", password='" + password + '\'' +
                 '}';
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof User)) return false;
         User user = (User) o;
         return userId == user.userId &&
                 Objects.equals(name, user.name) &&
@@ -62,10 +65,9 @@ public class User {
                 Objects.equals(phone, user.phone) &&
                 Objects.equals(password, user.password);
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(userId, name, email, phone, password);
     }
-    
 }

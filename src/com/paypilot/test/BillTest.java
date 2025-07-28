@@ -1,5 +1,6 @@
 package com.paypilot.test;
 
+//<<<<<<< HEAD
 import com.paypilot.model.Bill;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
@@ -93,3 +94,4 @@ public class BillTest {
         assertNotEquals(bill1.hashCode(), bill2.hashCode());
     }
 }
+//>>>>>>> branch 'main' of git@github.com:jahnavimurali/PayPilot_Phase_1.git
