@@ -1,9 +1,10 @@
-package paypilot;
+package com.paypilot.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 
+import com.paypilot.model.Reminder;
 import org.junit.jupiter.api.Test;
 
 public class ReminderTest {
