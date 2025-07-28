@@ -29,7 +29,9 @@ public class BillFunctions {
             .filter(bill -> bill.getUserId() == userId)
             .collect(Collectors.toList());
     }
-// Method to get Total Due Bills of a Specific User
+
+
+    // Method to get Total Due Bills of a Specific User
     public double getTotalDueBill(User user) {
         List<Bill> userSpecificBills = findAllBillsByUser(user.getUserId());
         double totalDue = 0;
@@ -107,5 +109,21 @@ public class BillFunctions {
         }
 
         return newBills;
+    }
+	
+	// Group a group of bills by category
+	public static Map<String, List<Bill>> groupBillsByCategory(List<Bill> bills) {
+    	return bills.stream()
+                .collect(Collectors.groupingBy(Bill::getCategory));
+    }
+	
+	// Retrieves a bill based on bill id
+	public static Bill getABillById(List<Bill> bills, int billId) {
+        for (Bill bill : bills) {
+            if (bill.getBillId() == billId) {
+                return bill;
+            }
+        }
+        return null;
     }
 }
