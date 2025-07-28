@@ -26,8 +26,8 @@ public class BillFunctions {
     // Method to filter and return bills based on user
     public List<Bill> findAllBillsByUser(int userId) {
         return billList.stream()
-            .filter(bill -> bill.getUserId().equals(userId))
-            .collect(Collectors.toList());
+	        .filter(bill -> bill.getUserId() == userId)
+	        .collect(Collectors.toList());
     }
 
   // Function to check if a bill is recurring 
@@ -40,7 +40,7 @@ public class BillFunctions {
 	    LocalDate nextDueDate = originalBill.getDueDate().plusMonths(1);
 
 	    return allBills.stream().anyMatch(existing ->
-	        existing.getUserId().equals(originalBill.getUserId()) &&
+	        existing.getUserId()== (originalBill.getUserId()) &&
 	        existing.getBillName().equalsIgnoreCase(originalBill.getBillName()) &&
 	        existing.getCategory().equalsIgnoreCase(originalBill.getCategory()) &&
 	        existing.getDueDate().equals(nextDueDate)
@@ -64,12 +64,12 @@ public class BillFunctions {
         {
             if (bill.isRecurring() && bill.getDueDate().isBefore(currentDate)) 
             {
-                String newId;
+                
                 // Generating a unique ID that doesn't clash
-                do 
-                {
-                    newId = UUID.randomUUID().toString();
-                } while (existingIds.contains(newId));
+                int newId;
+		do {
+		    newId = random.nextInt(Integer.MAX_VALUE); // Ensures a non-negative int
+		} while (existingIds.contains(newId));
                 
                 existingIds.add(newId);
 
