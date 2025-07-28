@@ -5,6 +5,7 @@ import com.paypilot.model.Payment;
 import com.paypilot.model.User;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 public class MockDataGenerator {
@@ -30,15 +31,15 @@ public class MockDataGenerator {
         return users;
     }
 
-    public static List<Bill> generateBills() {
+public static List<Bill> generateBills() {
         List<Bill> bills = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
+        LocalDate today = LocalDate.now();
         for (int i = 1; i <= 10; i++) {
+            int userId = (i % 5) + 1;
             int index = (i - 1) % BILL_NAMES.length;
-            cal.setTime(new Date());
-            cal.add(Calendar.DAY_OF_MONTH, -i);
-            String dueDate = sdf.format(cal.getTime());
+            LocalDate dueDate = today.minusDays(i);
             bills.add(new Bill(
+                userId,
                 i,
                 BILL_NAMES[index],
                 CATEGORIES[index],
