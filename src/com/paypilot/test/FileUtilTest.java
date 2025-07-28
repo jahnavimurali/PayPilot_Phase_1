@@ -6,24 +6,34 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDate;
+
 
 public class FileUtilTest {
 
     @Test
-    public void testWriteAndReadObject() throws Exception {
-        Payment payment = new Payment("BILL123", 500.0);
+    public void testWriteAndReadPayment() throws Exception {
+        // Create a payment object with updated structure
+        Payment payment = new Payment(
+                1,              // paymentId
+                101,            // billId
+                2500.50,        // amountPaid
+                LocalDate.of(2025, 7, 28), // paymentDate
+                "Credit Card"   // mode
+        );
 
         // Create a temporary file
         File tempFile = File.createTempFile("paymentTest", ".tmp");
         tempFile.deleteOnExit();
 
-        // Write to file
+        // Write the payment object to the file
         FileUtil.writeToFile(payment, tempFile);
 
-        // Read from file
+        // Read the object back from the file
         Object readObj = FileUtil.readFromFile(tempFile);
 
-        // Check if original and read objects are equal
+        // Validate if the read object is equal to the original
         assertEquals(payment, readObj);
     }
 }
+
