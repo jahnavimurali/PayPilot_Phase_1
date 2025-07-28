@@ -1,7 +1,9 @@
 package com.paypilot.service;
 import java.time.LocalDate;
 import java.util.*;
-import com.paypilot.model.Bill; 
+import java.util.stream.Collectors;
+
+import com.paypilot.model.Bill;
 
 public class BillFunctions {
 
