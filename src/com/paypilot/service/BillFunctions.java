@@ -64,7 +64,7 @@ public class BillFunctions {
   public static List<Bill> checkAndGenerateRecurringBills(List<Bill> bills) 
   {
         List<Bill> newBills = new ArrayList<>();
-        Set<String> existingIds = new HashSet<>();
+        Set<Integer> existingIds = new HashSet<>();
         LocalDate currentDate = LocalDate.now();
 
         //Adding existing IDs to the set
@@ -77,12 +77,12 @@ public class BillFunctions {
         {
             if (bill.isRecurring() && bill.getDueDate().isBefore(currentDate)) 
             {
-                String newId;
+                
                 // Generating a unique ID that doesn't clash
-                do 
-                {
-                    newId = UUID.randomUUID().toString();
-                } while (existingIds.contains(newId));
+                int newId;
+		do {
+		    newId = random.nextInt(Integer.MAX_VALUE); // Ensures a non-negative int
+		} while (existingIds.contains(newId));
                 
                 existingIds.add(newId);
 
