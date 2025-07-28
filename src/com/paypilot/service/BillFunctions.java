@@ -97,11 +97,13 @@ public class BillFunctions {
 
         return newBills;
     }
+	
 	// Group a group of bills by category
 	public static Map<String, List<Bill>> groupBillsByCategory(List<Bill> bills) {
     	return bills.stream()
                 .collect(Collectors.groupingBy(Bill::getCategory));
     }
+	
 	// Retrieves a bill based on bill id
 	public static Bill getABillById(List<Bill> bills, int billId) {
         for (Bill bill : bills) {
