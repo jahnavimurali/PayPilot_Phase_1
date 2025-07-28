@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import com.paypilot.model.Bill;
 import com.paypilot.model.User; 
-
+import java.util.Random; 
 public class BillFunctions {
 
     private List<Bill> billList; // Variable to store all the bills
@@ -81,6 +81,8 @@ public class BillFunctions {
                 // Generating a unique ID that doesn't clash
                 int newId;
 		do {
+			Random random = new Random();
+
 		    newId = random.nextInt(Integer.MAX_VALUE); // Ensures a non-negative int
 		} while (existingIds.contains(newId));
                 
