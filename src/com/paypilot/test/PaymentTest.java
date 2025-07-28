@@ -1,8 +1,13 @@
 package com.paypilot.test;
 
+import com.paypilot.exception.InvalidPaymentDateException;
+import com.paypilot.model.Bill;
 import com.paypilot.model.Payment;
+import com.paypilot.util.PaymentDateValidator;
+
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PaymentTest {
@@ -11,6 +16,7 @@ public class PaymentTest {
     private final Payment payment1 = new Payment(1, 101, 100.0, testDate, "Credit Card");
     private final Payment payment1Copy = new Payment(1, 101, 100.0, testDate, "Credit Card");
     private final Payment payment2 = new Payment(2, 102, 50.0, testDate.plusDays(1), "Debit Card");
+    private final Bill bill = new Bill(99, 99, "TestBill", "testCategory", testDate.plusDays(2), 0, false);
 
     // equals() tests
     @Test
@@ -101,5 +107,12 @@ public class PaymentTest {
     public void testHashCode_DifferentObjectsDifferentHashCodes() {
         assertNotEquals(payment1.hashCode(), payment2.hashCode(),
             "Different payments should have different hash codes");
+    }
+    
+    @Test
+    public  void testValidateDate() {
+    	assertThrows(InvalidPaymentDateException.class,  
+    			() -> PaymentDateValidator.validatePaymentDate(bill, payment1)
+    	);
     }
 }
