@@ -1,7 +1,9 @@
 package com.paypilot.service;
 import java.time.LocalDate;
 import java.util.*;
-import com.paypilot.model.Bill; 
+import java.util.stream.Collectors;
+
+import com.paypilot.model.Bill;
 
 public class BillFunctions {
 
@@ -22,10 +24,10 @@ public class BillFunctions {
     }
 
     // Method to filter and return bills based on user
-    public List<Bill> findAllBillsByUser(String userId) {
+    public List<Bill> findAllBillsByUser(int userId) {
         return billList.stream()
-            .filter(bill -> bill.getUserId().equals(userId))
-            .collect(Collectors.toList());
+	        .filter(bill -> bill.getUserId() == userId)
+	        .collect(Collectors.toList());
     }
 
   // Function to check if a bill is recurring 
@@ -38,7 +40,7 @@ public class BillFunctions {
 	    LocalDate nextDueDate = originalBill.getDueDate().plusMonths(1);
 
 	    return allBills.stream().anyMatch(existing ->
-	        existing.getUserId().equals(originalBill.getUserId()) &&
+	        existing.getUserId()== (originalBill.getUserId()) &&
 	        existing.getBillName().equalsIgnoreCase(originalBill.getBillName()) &&
 	        existing.getCategory().equalsIgnoreCase(originalBill.getCategory()) &&
 	        existing.getDueDate().equals(nextDueDate)
@@ -49,7 +51,7 @@ public class BillFunctions {
   public static List<Bill> checkAndGenerateRecurringBills(List<Bill> bills) 
   {
         List<Bill> newBills = new ArrayList<>();
-        Set<String> existingIds = new HashSet<>();
+        Set<Integer> existingIds = new HashSet<>();
         LocalDate currentDate = LocalDate.now();
 
         //Adding existing IDs to the set
@@ -62,11 +64,12 @@ public class BillFunctions {
         {
             if (bill.isRecurring() && bill.getDueDate().isBefore(currentDate)) 
             {
-                String newId;
+                
                 // Generating a unique ID that doesn't clash
-                do 
-                {
-                    newId = UUID.randomUUID().toString();
+                int newId;
+                Random random = new Random();
+                do {
+                    newId = random.nextInt(Integer.MAX_VALUE); // Ensures a non-negative int
                 } while (existingIds.contains(newId));
                 
                 existingIds.add(newId);
@@ -94,5 +97,43 @@ public class BillFunctions {
         }
 
         return newBills;
+    }
+	
+	// Group a group of bills by category
+	public static Map<String, List<Bill>> groupBillsByCategory(List<Bill> bills) {
+    	return bills.stream()
+                .collect(Collectors.groupingBy(Bill::getCategory));
+    }
+	
+	// Retrieves a bill based on bill id
+	public static Bill getABillById(List<Bill> bills, int billId) {
+        for (Bill bill : bills) {
+            if (bill.getBillId() == billId) {
+                return bill;
+            }
+        }
+        return null;
+    }
+
+    // This method returns a list of all overdue bills
+    public static List<Bill> getOverDueBills(List<Bill> bills){
+        List<Bill> overdueBills = new ArrayList<>();
+        LocalDate currentDate = LocalDate.now();
+
+        // Finding overdue bills
+        for (Bill bill : bills) {
+            LocalDate dueDate = bill.getDueDate();
+            if (dueDate.isBefore(currentDate)) {
+                overdueBills.add(bill);
+            }
+        }
+
+        return overdueBills;
+    }
+
+    // This method removes a bill from the list of bills and return the updated list
+    public List<Bill> removeBill(Bill billToRemove) {
+        billList.remove(billToRemove);
+        return billList;
     }
 }
