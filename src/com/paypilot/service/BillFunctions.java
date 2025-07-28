@@ -115,7 +115,8 @@ public class BillFunctions {
     }
 
     // This method returns a list of all overdue bills
-    public static List<Bill> getOverDueBills(List<Bill> bills){
+    public static List<Bill> getOverDueBills(){
+        List<Bill> bills = new BillFunctions().findAllBills(); // Assuming this retrieves all bills
         List<Bill> overdueBills = new ArrayList<>();
         LocalDate currentDate = LocalDate.now();
 
