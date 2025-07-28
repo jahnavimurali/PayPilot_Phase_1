@@ -6,46 +6,6 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-//class ReminderTest {
-//
-//	   @Test
-//	    public void testReminderTriggeredExactly2DaysBefore() {
-//	        LocalDate dueDate = LocalDate.of(2025, 8, 10);
-//	        LocalDate currentDate = LocalDate.of(2025, 8, 8);
-//
-//	        assertTrue(Reminder.shouldSendReminder(dueDate, currentDate),
-//	                "Reminder should be sent exactly 2 days before due date");
-//	    }
-//
-//	    @Test
-//	    public void testReminderTooEarly() {
-//	        LocalDate dueDate = LocalDate.of(2025, 8, 10);
-//	        LocalDate currentDate = LocalDate.of(2025, 8, 7); // 3 days before
-//
-//	        assertFalse(Reminder.shouldSendReminder(dueDate, currentDate),
-//	                "Reminder should NOT be sent 3 days before");
-//	    }
-//
-//	    @Test
-//	    public void testReminderTooLate() {
-//	        LocalDate dueDate = LocalDate.of(2025, 8, 10);
-//	        LocalDate currentDate = LocalDate.of(2025, 8, 9); // 1 day before
-//
-//	        assertFalse(Reminder.shouldSendReminder(dueDate, currentDate),
-//	                "Reminder should NOT be sent 1 day before");
-//	    }
-//	    
-//	    @Test
-//	    public void testReminderFailsIfDueDateIsNull() {
-//	        // This will cause a NullPointerException, which will FAIL the test
-//	        LocalDate dueDate = null;
-//	        LocalDate currentDate = LocalDate.of(2025, 8, 8);
-//
-//	        // This line will throw an exception and fail
-//	        Reminder.shouldSendReminder(dueDate, currentDate);
-//	    }
-//}
-
 public class ReminderTest {
 
     @Test
