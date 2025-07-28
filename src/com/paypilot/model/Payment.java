@@ -1,10 +1,10 @@
 package com.paypilot.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import com.paypilot.util.DateUtil;
 
-public class Payment implements Serializable {
+public class Payment {
 
     private int paymentId;
     private int billId;
@@ -12,11 +12,11 @@ public class Payment implements Serializable {
     private LocalDate paymentDate;
     private String mode;
 
-    // Constructor
+    // Constructor 
     public Payment(int paymentId, int billId, double amountPaid, LocalDate paymentDate, String mode) {
         this.paymentId = paymentId;
         this.billId = billId;
-        this.amountPaid = amountPaid;
+        this.amountPaid = validateAmount(amountPaid);
         this.paymentDate = paymentDate;
         this.mode = mode;
     }
@@ -43,7 +43,7 @@ public class Payment implements Serializable {
     }
 
     public void setAmountPaid(double amountPaid) {
-        this.amountPaid = amountPaid;
+        this.amountPaid = validateAmount(amountPaid);
     }
 
     public LocalDate getPaymentDate() {
@@ -62,7 +62,35 @@ public class Payment implements Serializable {
         this.mode = mode;
     }
 
-    // equals method for JUnit and object comparison
+    // Amount validation
+    private double validateAmount(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be positive.");
+        }
+        return amount;
+    }
+
+    // Display method
+    public void display() {
+        System.out.println("Payment ID  : " + paymentId);
+        System.out.println("Bill ID     : " + billId);
+        System.out.println("Amount Paid : ₹" + amountPaid);
+        System.out.println("Payment Date: " + (paymentDate != null ? DateUtil.format(paymentDate) : "N/A"));
+        System.out.println("Mode        : " + mode);
+
+        LocalDate today = LocalDate.now();
+        if (paymentDate != null) {
+            if (paymentDate.isAfter(today)) {
+                System.out.println("Status      : Scheduled");
+            } else if (paymentDate.isEqual(today)) {
+                System.out.println("Status      : Processed Today");
+            } else {
+                System.out.println("Status      : Completed");
+            }
+        }
+    }
+
+    // equals method
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,13 +103,13 @@ public class Payment implements Serializable {
                 Objects.equals(mode, payment.mode);
     }
 
-    // hashCode for proper collection support
+    // hashCode
     @Override
     public int hashCode() {
         return Objects.hash(paymentId, billId, amountPaid, paymentDate, mode);
     }
 
-    // toString for readable output
+    // toString
     @Override
     public String toString() {
         return "Payment{" +
