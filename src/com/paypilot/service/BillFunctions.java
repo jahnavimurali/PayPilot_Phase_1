@@ -1,10 +1,13 @@
 package com.paypilot.service;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import com.paypilot.model.Bill;
-
+import com.paypilot.model.User; 
+import java.util.Random; 
 public class BillFunctions {
 
     private List<Bill> billList; // Variable to store all the bills
@@ -26,32 +29,39 @@ public class BillFunctions {
     // Method to filter and return bills based on user
     public List<Bill> findAllBillsByUser(int userId) {
         return billList.stream()
-	        .filter(bill -> bill.getUserId() == userId)
-	        .collect(Collectors.toList());
+            .filter(bill -> bill.getUserId() == userId)
+            .collect(Collectors.toList());
     }
 
-  
 
-  // Function to avoid generating a recurring bill if it already exists
-  public static boolean hasRecurringBillForNextMonth(Bill originalBill, List<Bill> allBills) {
-	    LocalDate nextDueDate = originalBill.getDueDate().plusMonths(1);
-
-	    return allBills.stream().anyMatch(existing ->
-	        existing.getUserId()== (originalBill.getUserId()) &&
-	        existing.getBillName().equalsIgnoreCase(originalBill.getBillName()) &&
-	        existing.getCategory().equalsIgnoreCase(originalBill.getCategory()) &&
-	        existing.getDueDate().equals(nextDueDate)
-	    );
-	}
-
-
-  // Checking using below methods, if the bills are recurring and generating new due date, and amount
+    // Method to get Total Due Bills of a Specific User
+    public double getTotalDueBill(User user) {
+        List<Bill> userSpecificBills = findAllBillsByUser(user.getUserId());
+        double totalDue = 0;
+        for (Bill bill : userSpecificBills) {
+            if (bill.getDueDate().isBefore(LocalDate.now())) {
+                totalDue += bill.getAmount();
+            }
+        }
+        return totalDue;
+    }
 
   // Function to check if a bill is recurring 
   public static boolean isBillRecurring(Bill bill) {
     return bill != null && bill.isRecurring();
   }
 
+  // Function to avoid generating a recurring bill if it already exists
+  public static boolean hasRecurringBillForNextMonth(Bill originalBill, List<Bill> allBills) {
+	    LocalDate nextDueDate = originalBill.getDueDate().plusMonths(1);
+
+	    return allBills.stream().anyMatch(existing ->
+	        existing.getUserId() == originalBill.getUserId() &&
+	        existing.getBillName().equalsIgnoreCase(originalBill.getBillName()) &&
+	        existing.getCategory().equalsIgnoreCase(originalBill.getCategory()) &&
+	        existing.getDueDate().equals(nextDueDate)
+	    );
+	}
 
   // Function to check if a bill is recurring and autogenerating next months's bill
   public static List<Bill> checkAndGenerateRecurringBills(List<Bill> bills) 
@@ -73,10 +83,11 @@ public class BillFunctions {
                 
                 // Generating a unique ID that doesn't clash
                 int newId;
-                Random random = new Random();
-                do {
-                    newId = random.nextInt(Integer.MAX_VALUE); // Ensures a non-negative int
-                } while (existingIds.contains(newId));
+		do {
+			Random random = new Random();
+
+		    newId = random.nextInt(Integer.MAX_VALUE); // Ensures a non-negative int
+		} while (existingIds.contains(newId));
                 
                 existingIds.add(newId);
 
@@ -122,8 +133,7 @@ public class BillFunctions {
     }
 
     // This method returns a list of all overdue bills
-    public static List<Bill> getOverDueBills(){
-        List<Bill> bills = new BillFunctions().findAllBills();
+    public static List<Bill> getOverDueBills(List<Bill> bills){
         List<Bill> overdueBills = new ArrayList<>();
         LocalDate currentDate = LocalDate.now();
 
@@ -139,9 +149,33 @@ public class BillFunctions {
     }
 
     // This method removes a bill from the list of bills and return the updated list
-    public List<Bill> removeBill(Bill billToRemove) {
-        List<Bill> billList = this.findAllBills();
-        billList.remove(billToRemove);
-        return billList;
+    public List<Bill> removeBill(int billId) {
+        List<Bill> bills = findAllBills();
+        bills.removeIf(bill -> bill.getBillId() == billId);
+        return bills;
     }
+	    /**
+     * Exports a list of bills to a text file.
+     *
+     * @param bills    The list of bills to export.
+     * @param filePath The path of the text file.
+     */
+	//Kanishk
+    public static void exportBillsToTextFile(List<Bill> bills, String filePath) {
+        if (bills == null || bills.isEmpty()) {
+            System.out.println("No bills to export.");
+            return;
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            for (Bill bill : bills) {
+                bw.write(bill.toString());
+                bw.newLine();
+            }
+            System.out.println("Bills exported to " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	
 }
