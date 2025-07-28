@@ -113,4 +113,26 @@ public class BillFunctions {
         }
         return null;
     }
+
+    // This method returns a list of all overdue bills
+    public static List<Bill> getOverDueBills(List<Bill> bills){
+        List<Bill> overdueBills = new ArrayList<>();
+        LocalDate currentDate = LocalDate.now();
+
+        // Finding overdue bills
+        for (Bill bill : bills) {
+            LocalDate dueDate = bill.getDueDate();
+            if (dueDate.isBefore(currentDate)) {
+                overdueBills.add(bill);
+            }
+        }
+
+        return overdueBills;
+    }
+
+    // This method removes a bill from the list of bills and return the updated list
+    public List<Bill> removeBill(Bill billToRemove) {
+        billList.remove(billToRemove);
+        return billList;
+    }
 }
