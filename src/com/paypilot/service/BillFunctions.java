@@ -1,4 +1,59 @@
 package com.paypilot.service;
+import java.time.LocalDate;
+import java.util.*;
+import com.paypilot.model.Bill; 
 
 public class BillFunctions {
+
+  // Function to check if a bill is recurring 
+  public static boolean isBillRecurring(Bill bill) {
+    return bill != null && bill.isRecurring();
+  }
+
+  // Function to check if a bill is recurring and autogenerating next months's bill
+  public static List<Bill> checkAndGenerateRecurringBills(List<Bill> bills) 
+    {
+        List<Bill> newBills = new ArrayList<>();
+        Set<String> existingIds = new HashSet<>();
+        LocalDate currentDate = LocalDate.now();
+
+        //Adding existing IDs to the set
+        for (Bill bill : bills) 
+        {
+            existingIds.add(bill.getBillId());
+        }
+
+        for (Bill bill : bills) 
+        {
+            if (bill.isRecurring() && bill.getDueDate().isBefore(currentDate)) 
+            {
+                String newId;
+                // Generating a unique ID that doesn't clash
+                do 
+                {
+                    newId = UUID.randomUUID().toString();
+                } while (existingIds.contains(newId));
+                
+                existingIds.add(newId);
+
+                // Generating Date for the next month's bill
+                LocalDate nextDueDate = bill.getDueDate().plusMonths(1);
+                
+                // Creating bill for the next month 
+                Bill nextMonthBill = new Bill(
+                	bill.getUserId(),
+                    newId,
+                    bill.getBillName(),
+                    bill.getCategory(),
+                    nextDueDate,
+                    bill.getAmount(),
+                    true
+                );
+                
+                newBills.add(nextMonthBill);
+            }
+        }
+
+        return newBills;
+    }
 }
