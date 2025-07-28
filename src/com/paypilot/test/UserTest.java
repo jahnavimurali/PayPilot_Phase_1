@@ -1,8 +1,8 @@
 package com.paypilot.test;
 
 import com.paypilot.model.User;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class UserTest {
 
@@ -39,5 +39,43 @@ public class UserTest {
         // Negative check
         assertNotEquals(user1, user2);
         assertNotEquals(user1.hashCode(), user2.hashCode());
+    }
+    @Test
+    public void testEquals_SameObject_ReturnsTrue() {
+        User user = new User(1, "Ayush Melty", "ayushmelty@gmail.com", "1234567890", "password");
+        assertTrue(user.equals(user));
+    }
+
+    @Test
+    public void testEquals_NullObject_ReturnsFalse() {
+        User user = new User(1, "Ayush Melty", "ayushmelty@gmail.com", "1234567890", "password");
+        assertFalse(user.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentClass_ReturnsFalse() {
+        User user = new User(1, "Ayush Melty", "ayushmelty@gmail.com", "1234567890", "password");
+        assertFalse(user.equals("Not a User object"));
+    }
+
+    @Test
+    public void testEquals_EqualObjects_ReturnsTrue() {
+        User user1 = new User(1, "Ayush Melty", "ayushmelty@gmail.com", "1234567890", "password");
+        User user2 = new User(1, "Ayush Melty", "ayushmelty@gmail.com", "1234567890", "password");
+        assertTrue(user1.equals(user2));
+    }
+
+    @Test
+    public void testEquals_DifferentObjects_ReturnsFalse() {
+        User user1 = new User(1, "Ayush Melty", "ayushmelty@gmail.com", "1234567890", "password");
+        User user2 = new User(2, "Astha Singh", "singh.k.astha@gmail.com", "0987654321", "password123");
+        assertFalse(user1.equals(user2));
+    }
+
+    @Test
+    public void testHashCode_EqualObjects_SameHashCode() {
+        User user1 = new User(1, "Ayush Melty", "ayushmelty@gmail.com", "1234567890", "password");
+        User user2 = new User(1, "Ayush Melty", "ayushmelty@gmail.com", "1234567890", "password");
+        assertEquals(user1.hashCode(), user2.hashCode());
     }
 }

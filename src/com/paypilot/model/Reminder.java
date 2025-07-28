@@ -1,6 +1,8 @@
 package com.paypilot.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
+
 
 public class Reminder {
     private String reminderId;
@@ -50,11 +52,27 @@ public class Reminder {
     @Override
     public String toString() {
         return "Reminder{" +
-                "reminderId='" + reminderId + '\'' +
-                ", billId='" + billId + '\'' +
+                "reminderId=" + reminderId +
+                ", billId=" + billId +
                 ", reminderDate=" + reminderDate +
                 ", message='" + message + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reminder reminder = (Reminder) o;
+        return reminderId == reminder.reminderId &&
+                billId == reminder.billId &&
+                Objects.equals(reminderDate, reminder.reminderDate) &&
+                Objects.equals(message, reminder.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reminderId, billId, reminderDate, message);
     }
 
     public static boolean shouldSendReminder(LocalDate billDueDate, LocalDate today) {
