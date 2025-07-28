@@ -1,137 +1,97 @@
 package com.paypilot.test;
 
+//<<<<<<< HEAD
+import com.paypilot.model.Bill;
+import org.junit.jupiter.api.Test;
+import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDate;
-import java.util.concurrent.ThreadLocalRandom;
+public class BillTest {
+    // Test data
+    private final LocalDate testDate = LocalDate.of(2023, 12, 31);
+    private final Bill bill1 = new Bill(1, 101, "Electricity", "Utilities", testDate, 100.0, true);
+    private final Bill bill1Copy = new Bill(1, 101, "Electricity", "Utilities", testDate, 100.0, true);
+    private final Bill bill2 = new Bill(2, 102, "Internet", "Services", testDate.plusMonths(1), 50.0, false);
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+    @Test
+    public void testEquals_Reflexivity() {
+        // A bill should equal itself
+        assertTrue(bill1.equals(bill1));
+    }
 
-import com.paypilot.model.Bill;
+    @Test
+    public void testEquals_Symmetry() {
+        // If bill1 equals bill1Copy, then bill1Copy must equal bill1
+        assertEquals(bill1.equals(bill1Copy), bill1Copy.equals(bill1));
+    }
 
-class BillTest {
+    @Test
+    public void testEquals_Transitivity() {
+        Bill bill3 = new Bill(1, 101, "Electricity", "Utilities", testDate, 100.0, true);
+        // If bill1 equals bill1Copy and bill1Copy equals bill3, then bill1 must equal bill3
+        assertTrue(bill1.equals(bill1Copy) && bill1Copy.equals(bill3) && bill1.equals(bill3));
+    }
 
-	private Bill bill;
-	
-	@BeforeEach
-	void setUp() {
-		//create new bill object
-		bill=new Bill(0, 0, "a", "a", LocalDate.now(), 0, false);
-	}
-	
-	@Test
-	//Check userId setter
-	void testSetUserId() {
-		int userId=12345;
-		bill.setUserId(userId);
-		System.out.println(bill.getUserId());
-		assertEquals(userId, bill.getUserId(),"userId not set");
-	}
+    @Test
+    public void testEquals_Consistency() {
+        // Multiple calls should consistently return the same result
+        assertTrue(bill1.equals(bill1Copy));
+        assertTrue(bill1.equals(bill1Copy)); // Same result on second call
+    }
 
-	@Test
-	//Check billId setter
-	void testSetBillId() {
-		int billId=12345;
-		bill.setBillId(billId);
-		assertEquals(billId, bill.getBillId(),"billId not set");
-	}
+    @Test
+    public void testEquals_NullComparison() {
+        // A bill should not equal null
+        assertFalse(bill1.equals(null));
+    }
 
-	@Test
-	//Check billName setter
-	void testSetBillName() {
-		String billName="Electricity";
-		bill.setBillName(billName);
-		assertEquals(billName, bill.getBillName(),"billName not set");
-	}
-	
-	@Test
-	//Check category setter
-	void testSetCategory() {
-		String category="Utilities";
-		bill.setCategory(category);
-		assertEquals(category, bill.getCategory(),"category not set");
-	}
+    @Test
+    public void testEquals_DifferentClass() {
+        // A bill should not equal an object of a different class
+        assertFalse(bill1.equals("Not a Bill object"));
+    }
 
-	@Test
-	//Check if random date can be set in dueDate
-	void testSetRandomDueDate() {
-		LocalDate start = LocalDate.ofEpochDay(0);
-        LocalDate end = LocalDate.now();
-        long days = end.toEpochDay() - start.toEpochDay();
-        long randomDay = ThreadLocalRandom.current().nextLong(days + 1);
-        LocalDate randomDate = start.plusDays(randomDay);
+    @Test
+    public void testEquals_DifferentUserId() {
+        Bill modified = new Bill(999, bill1.getBillId(), bill1.getBillName(), 
+                              bill1.getCategory(), bill1.getDueDate(), 
+                              bill1.getAmount(), bill1.isRecurring());
+        assertFalse(bill1.equals(modified));
+    }
 
-        bill.setDueDate(randomDate);
-        assertEquals(randomDate, bill.getDueDate(),"Random dueDate not set");
-	}
-	
-	@Test
-	//Check if random date from future can be set in dueDate
-	void testSetFutureDueDate() {
-		LocalDate start = LocalDate.now().plusDays(1);
-	    LocalDate end = LocalDate.now().plusYears(10);
-	    long randomDay = ThreadLocalRandom.current().nextLong(start.toEpochDay(), end.toEpochDay() + 1);
-	    LocalDate randomFutureDate = LocalDate.ofEpochDay(randomDay);
+    @Test
+    public void testEquals_DifferentBillId() {
+        Bill modified = new Bill(bill1.getUserId(), 999, bill1.getBillName(), 
+                              bill1.getCategory(), bill1.getDueDate(), 
+                              bill1.getAmount(), bill1.isRecurring());
+        assertFalse(bill1.equals(modified));
+    }
 
-	    bill.setDueDate(randomFutureDate);
-	    assertTrue(randomFutureDate.isAfter(LocalDate.now()));
-        assertEquals(randomFutureDate, bill.getDueDate(),"Future dueDate not set");
-	}
-	
-	@Test
-	//Check if 0 date, 01-01-1970, can be set in dueDate
-	void testSetZeroDueDate() {
-		LocalDate zeroDate=LocalDate.ofEpochDay(0);
-		bill.setDueDate(zeroDate);
-		assertEquals(zeroDate, bill.getDueDate(),"Zero dueDate not set");
-	}
-	
-	@Test
-	//Check if null can be set in dueDate
-	void testSetNullDueDate() {
-		Exception exception= assertThrows(IllegalArgumentException.class, ()->{
-			bill.setDueDate(null);
-		});
-		
-		assertEquals("Input date string cannot be null", exception.getMessage());
-	}
-	
-	@Test
-	//Check if 29th February can be set for leap years in dueDate
-	void testSetLeapYearDueDate() {
-		LocalDate leapDate = LocalDate.of(2020, 2, 29);
-		bill.setDueDate(leapDate);
-        assertEquals(leapDate, bill.getDueDate(), "Leap year dueDate not set");
-	}
+    @Test
+    public void testEquals_DifferentAmount() {
+        Bill modified = new Bill(bill1.getUserId(), bill1.getBillId(), bill1.getBillName(), 
+                              bill1.getCategory(), bill1.getDueDate(), 
+                              999.99, bill1.isRecurring());
+        assertFalse(bill1.equals(modified));
+    }
 
-	@Test
-	//Check if amount can be set to positive value
-	void testSetAmount() {
-		double billAmount=12345.83;
-		bill.setAmount(billAmount);
-		assertEquals(billAmount, bill.getAmount(),0.001,"Amount not set");
-	}
-	
-	@Test
-	//Check if amount can be set to negative value
-	void testSetNegativeAmount() {
-		double billAmount=-12345.67;
-		assertThrows(Exception.class, ()->{
-			bill.setAmount(billAmount);
-		},
-		"Amount can't be negative");
-	}
-	
-	@Test
-	//Check if isRecurring can be set and reset
-	void testSetRecurring() {
-		bill.setRecurring(true);
-		assertTrue(bill.isRecurring(),"isRecurring not set to true");
-		bill.setRecurring(false);
-		assertFalse(bill.isRecurring(),"isRecurring not set to false");
-	}
-	
-	
+    @Test
+    public void testHashCode_EqualObjectsSameHashCode() {
+        // Equal objects must have equal hash codes
+        assertEquals(bill1.hashCode(), bill1Copy.hashCode());
+    }
 
+    @Test
+    public void testHashCode_Consistency() {
+        // Multiple calls should return the same hash code
+        int initialHashCode = bill1.hashCode();
+        assertEquals(initialHashCode, bill1.hashCode());
+    }
+
+    @Test
+    public void testHashCode_DifferentObjectsDifferentHashCodes() {
+        // Different objects should ideally have different hash codes
+        assertNotEquals(bill1.hashCode(), bill2.hashCode());
+    }
 }
+//>>>>>>> branch 'main' of git@github.com:jahnavimurali/PayPilot_Phase_1.git

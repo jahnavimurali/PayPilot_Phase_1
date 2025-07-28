@@ -3,6 +3,7 @@ package com.paypilot.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
+
 /**
  * Represents a bill with its details.
  */
