@@ -1,4 +1,4 @@
-package com.paypilot.reader;
+package com.paypilot.util;
 
 import com.paypilot.model.Bill;
 import java.io.BufferedReader;
@@ -13,7 +13,7 @@ public class BillReader {
     public static List<Bill> readBillsFromCSV(String filename) throws IOException {
         List<Bill> bills = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(bills.csv))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("bills.csv"))) {
             String line = br.readLine(); // for reading header to skip it.
 
             while ((line = br.readLine()) != null) {
