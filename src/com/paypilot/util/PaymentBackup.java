@@ -1,11 +1,11 @@
 package com.paypilot.util;
 
+package com.junit;
 import java.io.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import com.paypilot.model.Payment;
 
 public class PaymentBackup {
 
@@ -16,17 +16,18 @@ public class PaymentBackup {
             for (Payment payment : payments) {
                 String timestamp = LocalDateTime.now().format(formatter);
 
-                String line = String.format("Timestamp: %s | PaymentID: %d | BillID: %d | Date: %s | Amount: %.2f | Status: %s | Mode: %s",
+                String line = String.format("Timestamp: %s | PaymentID: %d | BillID: %d | Date: %s | Amount: %.2f |  Mode: %s",
                         timestamp,
                         payment.getPaymentId(),
                         payment.getBillId(),
                         payment.getPaymentDate(),
-                        payment.getAmount(),
-                        payment.getStatus(),
+                        payment.getAmountPaid(),
                         payment.getMode());
 
                 writer.write(line);
                 writer.newLine();
+                
+                System.out.println("data written");
             }
 
         } catch (IOException e) {
