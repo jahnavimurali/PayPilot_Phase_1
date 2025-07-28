@@ -1,3 +1,5 @@
+package com.paypilot.model;
+
 import java.time.LocalDate;
 
 public class Reminder {
