@@ -1,7 +1,7 @@
 package com.paypilot.exception;
 
-public class InvalidPaymentException extends RuntimeException {
-  public InvalidPaymentException(String message) {
-    super(message);
-  }
+public class InvalidPaymentDateException extends Exception {
+    public InvalidPaymentDateException(String message) {
+        super(message);
+    }
 }
