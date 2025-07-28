@@ -45,6 +45,16 @@ class PaymentSetterTest {
 	}
 	
 	@Test
+	//Check if amount can be set to negative value
+	void testSetNegativeAmountPaid() {
+		double amountPaid=-12345.83;
+		assertThrows(IllegalArgumentException.class, ()->{
+			payment.setAmountPaid(amountPaid);
+		},"Negative amount can't be set");
+
+	}
+	
+	@Test
 	//Check if random date can be set in paymentDate
 	void testSetRandomPaymentDate() {
 		LocalDate start = LocalDate.ofEpochDay(0);
