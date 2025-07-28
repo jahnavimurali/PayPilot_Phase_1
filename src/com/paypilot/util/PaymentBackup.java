@@ -1,6 +1,7 @@
 package com.paypilot.util;
 
-package com.junit;
+import com.paypilot.model.Payment;
+
 import java.io.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
