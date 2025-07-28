@@ -1,4 +1,4 @@
-package test;
+package com.paypilot.test;
 
 import model.Payment;
 import util.FileUtil;
