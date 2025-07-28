@@ -54,5 +54,10 @@ public class Reminder {
                 ", message='" + message + '\'' +
                 '}';
     }
+
+    public static boolean shouldSendReminder(LocalDate billDueDate, LocalDate today) {
+        return today.equals(billDueDate.minusDays(2));
+    }
+    
 }
 
