@@ -154,26 +154,7 @@ public class BillFunctions {
         bills.removeIf(bill -> bill.getBillId() == billId);
         return bills;
     }
-
-    public static List<Bill> SortedBillsByDueDate(List<Bill> bills) {
-        List<Bill> sortedBills = new ArrayList<>(bills);
-        sortedBills.sort(Comparator.comparing(Bill::getDueDate));
-        return sortedBills;
-    }
-
-    public static List<Bill> findBillsDueInNextSevenDays(List<Bill> bills) {
-        LocalDate today = LocalDate.now();
-        LocalDate nextWeek = today.plusDays(7);
-
-        return bills.stream()
-                .filter(bill -> {
-                    LocalDate dueDate = bill.getDueDate();
-                    return (dueDate != null && !dueDate.isBefore(today) && !dueDate.isAfter(nextWeek));
-                })
-                .collect(Collectors.toList());
-    }
-
-    /**
+	    /**
      * Exports a list of bills to a text file.
      *
      * @param bills    The list of bills to export.

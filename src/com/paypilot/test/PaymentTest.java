@@ -3,8 +3,8 @@ package com.paypilot.test;
 import com.paypilot.exception.InvalidPaymentDateException;
 import com.paypilot.model.Bill;
 import com.paypilot.model.Payment;
+import com.paypilot.util.PaymentDateValidator;
 
-import com.paypilot.service.PaymentService;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
@@ -112,7 +112,7 @@ public class PaymentTest {
     @Test
     public  void testValidateDate() {
     	assertThrows(InvalidPaymentDateException.class,  
-    			() -> PaymentService.validatePaymentDate(bill, payment1)
+    			() -> PaymentDateValidator.validatePaymentDate(bill, payment1)
     	);
     }
 }
